@@ -1,5 +1,6 @@
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,6 +9,9 @@ from .serializers import FeedbackSerializer
 
 
 class FeedbackView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         feedback = Feedback.objects.all()
         serializer = FeedbackSerializer(feedback, many=True)
@@ -22,6 +26,11 @@ class FeedbackView(APIView):
             feedback_saved = serializer.save()
 
             return Response({"success": f"Feedback '{feedback_saved.theme}' created successfully"})
+
+
+class FeedbackByIdView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, pk):
         feedback = get_object_or_404(Feedback.objects.all(), pk=pk)

@@ -7,8 +7,12 @@ class Feedback(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     email = models.EmailField()
 
+    # Metadata
+    class Meta:
+        ordering = ["-created_at"]
+
     def __str__(self):
         """
-             String for representing the MyModelName object (in Admin site etc.)
+             String for representing the Feedback object (in Admin site etc.)
              """
         return self.theme
